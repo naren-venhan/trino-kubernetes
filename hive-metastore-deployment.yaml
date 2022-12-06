@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ./docker-compose.yml
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: hive-metastore
+  name: hive-metastore
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: hive-metastore
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ./docker-compose.yml
+        kompose.version: 1.26.1 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/trino-network: "true"
+        io.kompose.service: hive-metastore
+    spec:
+      enableServiceLinks: false
+      containers:
+        - env:
+            - name: METASTORE_DB_HOSTNAME
+              value: mariadb
+          image: narenbighaat/hive-metastore:3.0.5
+          name: hive-metastore
+          ports:
+            - containerPort: 9083   
+          command: ["sh", "-c", "--"]
+          args: ["bash /opt/entrypoint.sh"]
+          resources: {}
+          volumeMounts:
+            - name: metastore-cfg-vol
+              mountPath: /opt/hive-metastore/conf/metastore-site.xml
+              subPath: metastore-site.xml
+            - name: metastore-cfg-vol
+              mountPath: /opt/entrypoint.sh
+              subPath: entrypoint.sh
+      hostname: hive-metastore
+      restartPolicy: Always
+      volumes:
+        - name: metastore-cfg-vol
+          configMap:
+            name: metastore-cfg
+status: {}

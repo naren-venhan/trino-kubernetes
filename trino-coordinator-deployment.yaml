@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ./docker-compose.yml
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: trino-coordinator
+  name: trino-coordinator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: trino-coordinator
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ./docker-compose.yml
+        kompose.version: 1.26.1 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/trino-network: "true"
+        io.kompose.service: trino-coordinator
+    spec:
+      containers:
+        - image: trinodb/trino:latest
+          name: trino-coordinator
+          ports:
+            - containerPort: 8080
+          resources: {}
+          volumeMounts:
+            - name: trino-cfg-vol
+              mountPath: /etc/trino/catalog/adls2.properties
+              subPath: adls2.properties
+            - name: trino-cfg-vol
+              mountPath: /etc/trino/catalog/tpcds.properties
+              subPath: tpcds.properties
+            - name: trino-cfg-vol
+              mountPath: /etc/trino/catalog/tpch.properties
+              subPath: tpch.properties
+            - name: trino-cfg-vol
+              mountPath: /etc/trino/config.properties
+              subPath: config.properties
+            - name: trino-cfg-vol
+              mountPath: /etc/trino/jvm.config
+              subPath: jvm.config
+            - name: trino-cfg-vol
+              mountPath: /etc/trino/log.properties
+              subPath: log.properties
+            - name: trino-cfg-vol
+              mountPath: /etc/trino/node.properties
+              subPath: node.properties
+      hostname: trino-coordinator
+      restartPolicy: Always
+      volumes:
+        - name: trino-cfg-vol
+          configMap:
+            name: trino-cfg
+status: {}

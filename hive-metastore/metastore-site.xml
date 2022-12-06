@@ -1,0 +1,82 @@
+<configuration>
+
+    <!-- Metastore Properties -->
+    <property>
+        <name>metastore.thrift.uris</name>
+        <value>thrift://hive-metastore:9083</value>
+        <description>Thrift URI for the remote metastore. Used by metastore client to connect to remote metastore.</description>
+    </property>
+
+    <property>
+        <name>metastore.task.threads.always</name>
+        <value>org.apache.hadoop.hive.metastore.events.EventCleanerTask,org.apache.hadoop.hive.metastore.MaterializationsCacheCleanerTask</value>
+    </property>
+
+    <property>
+        <name>metastore.expression.proxy</name>
+        <value>org.apache.hadoop.hive.metastore.DefaultPartitionExpressionProxy</value>
+    </property>
+
+
+    <!-- MariaDB Connection -->
+    <property>
+        <name>javax.jdo.option.ConnectionDriverName</name>
+        <value>com.mysql.cj.jdbc.Driver</value>
+    </property>
+
+    <property>
+        <name>javax.jdo.option.ConnectionURL</name>
+        <value>jdbc:mysql://mariadb:3306/metastore_db</value>
+    </property>
+
+    <property>
+        <name>javax.jdo.option.ConnectionUserName</name>
+        <value>admin</value>
+    </property>
+
+    <property>
+        <name>javax.jdo.option.ConnectionPassword</name>
+        <value>admin</value>
+    </property>
+ <!--
+    <property>
+        <name>hive.metastore.schema.verification</name>
+        <value>false</value>
+    </property>
+    <property>
+   	<name>datanucleus.schema.autoCreateAll</name>
+  	    <value>true</value>
+   	    <description>creates necessary schema on a startup if one doesnt exist.</description>
+    </property>
+-->
+    <!-- File System Properties -->
+    <property>
+        <name>fs.s3a.path.style.access</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <name>fs.s3a.impl</name>
+        <value>org.apache.hadoop.fs.s3a.S3AFileSystem</value>
+    </property>
+
+    <property>
+        <name>mapred.input.dir.recursive</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <name>hive.mapred.supports.subdirectories</name>
+        <value>true</value>
+    </property>
+    <!-- Azure ADLS2 Credentials -->
+    <property>
+        <name>fs.azure.account.key.bhdatalaketest.dfs.core.windows.net</name>
+        <value>AGOhDjR4ZbZP2aUqS1Ta+EbOjutDAJIKm2bdb/l+BYx+ILTEvIXXtnvzoBOKDCBPlFeu/OWuetOV+AStpHLiIQ==</value>
+    </property>
+    <!-- <property>
+        <name>fs.azure.account.key.bhdatalaketest.dfs.core.windows.net</name>
+        <value>YlFBfCcGW07elPf9r5ImwmPXh/dDjE9KjnEsn9M5zvNOrNAKpAeZvaiQv+0W09den2oiCxWYY1zR+AStgymJBw==</value>
+    </property> -->
+
+</configuration>
